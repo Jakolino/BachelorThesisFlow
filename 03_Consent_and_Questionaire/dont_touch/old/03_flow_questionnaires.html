@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fragebögen – Flow-Studie</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2eb;
+    --surface: #faf8f3;
+    --ink: #1a1714;
+    --ink-muted: #6b6560;
+    --ink-faint: #b8b2aa;
+    --accent: #2d5a3d;
+    --accent-light: #e8f0ea;
+    --accent2: #8b3a1a;
+    --accent2-light: #f5ebe6;
+    --border: #ddd8ce;
+    --selected-bg: #2d5a3d;
+    --selected-fg: #fff;
+    --radius: 4px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Layout ── */
+  .page-wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 32px 80px;
+  }
+
+  /* ── Header ── */
+  .study-header {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 28px;
+    margin-bottom: 52px;
+  }
+  .study-label {
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 10px;
+  }
+  .study-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 38px;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  .study-subtitle {
+    margin-top: 8px;
+    color: var(--ink-muted);
+    font-size: 13px;
+  }
+
+  /* ── Progress ── */
+  .progress-bar-wrap {
+    margin-bottom: 44px;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 8px;
+  }
+  .progress-track {
+    height: 3px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 99px;
+    transition: width .4s ease;
+  }
+
+  /* ── Section block ── */
+  .section-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 36px 40px;
+    margin-bottom: 36px;
+  }
+  .section-tag {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .section-tag.fks { background: var(--accent-light); color: var(--accent); }
+  .section-tag.fam { background: var(--accent2-light); color: var(--accent2); }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+  .section-desc {
+    color: var(--ink-muted);
+    font-size: 12.5px;
+    margin-bottom: 28px;
+    line-height: 1.7;
+  }
+  .section-desc em {
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  /* ── Scale header ── */
+  .scale-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .scale-poles {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: .08em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    padding: 0 2px;
+    margin-bottom: 18px;
+  }
+
+  /* ── Item row ── */
+  .item-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    transition: background .15s;
+  }
+  .item-row:last-child { border-bottom: none; }
+  .item-text {
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  .item-num {
+    font-size: 10px;
+    color: var(--ink-faint);
+    margin-right: 6px;
+  }
+
+  /* ── Likert buttons ── */
+  .likert {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .likert-btn {
+    width: 34px;
+    height: 34px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    background: white;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all .15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .likert-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-light);
+  }
+  .likert-btn.selected {
+    background: var(--selected-bg);
+    border-color: var(--selected-bg);
+    color: var(--selected-fg);
+    font-weight: 500;
+  }
+  .fam-section .likert-btn:hover {
+    border-color: var(--accent2);
+    color: var(--accent2);
+    background: var(--accent2-light);
+  }
+  .fam-section .likert-btn.selected {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: white;
+  }
+
+  /* ── Unanswered highlight ── */
+  .item-row.unanswered .item-text { color: var(--accent2); }
+
+  /* ── Demographics block ── */
+  .demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .field-group label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 6px;
+  }
+  .field-group input,
+  .field-group select {
+    width: 100%;
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 9px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color .15s;
+  }
+  .field-group input:focus,
+  .field-group select:focus { border-color: var(--accent); }
+
+  /* ── Submit ── */
+  .submit-zone {
+    text-align: center;
+    margin-top: 44px;
+  }
+  .submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ink);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    padding: 14px 36px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: .06em;
+    cursor: pointer;
+    transition: background .2s, transform .15s;
+  }
+  .submit-btn:hover { background: var(--accent); transform: translateY(-1px); }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn svg { width: 16px; height: 16px; }
+
+  .submit-hint {
+    margin-top: 12px;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: .06em;
+  }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    background: var(--ink);
+    color: white;
+    padding: 14px 22px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    letter-spacing: .04em;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all .3s ease;
+    pointer-events: none;
+    z-index: 1000;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.success { background: var(--accent); }
+  .toast.error { background: var(--accent2); }
+
+  /* ── Validation banner ── */
+  .validation-banner {
+    display: none;
+    background: var(--accent2-light);
+    border: 1px solid var(--accent2);
+    border-radius: var(--radius);
+    padding: 12px 18px;
+    font-size: 12.5px;
+    color: var(--accent2);
+    margin-bottom: 20px;
+    letter-spacing: .03em;
+  }
+
+  @media (max-width: 600px) {
+    .page-wrapper { padding: 32px 16px 60px; }
+    .section-block { padding: 24px 20px; }
+    .demo-grid { grid-template-columns: 1fr; }
+    .likert-btn { width: 28px; height: 28px; font-size: 11px; }
+    .item-row { grid-template-columns: 1fr; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <header class="study-header">
+    <p class="study-label">Vorher-Befragung · Flow-Studie</p>
+    <h1 class="study-title">Fragebögen</h1>
+    <p class="study-subtitle">Bitte beantworten Sie alle Fragen sorgfältig und ehrlich. Es gibt keine richtigen oder falschen Antworten.</p>
+  </header>
+
+  <!-- Progress -->
+  <div class="progress-bar-wrap">
+    <div class="progress-meta">
+      <span>Fortschritt</span>
+      <span id="progress-label">0 / 0 beantwortet</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+
+  <div class="validation-banner" id="validation-banner">
+    ⚠ Bitte beantworten Sie alle markierten Fragen, bevor Sie fortfahren.
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       BLOCK 1 · Demographics
+  ══════════════════════════════════════════ -->
+  <div class="section-block">
+    <span class="section-tag fks">Demografik</span>
+    <h2 class="section-title">Angaben zur Person</h2>
+    <p class="section-desc">Diese Angaben dienen ausschließlich statistischen Zwecken und werden anonymisiert ausgewertet.</p>
+    <div class="demo-grid">
+      <div class="field-group">
+        <label>Alter</label>
+        <input type="number" id="age" min="16" max="99" placeholder="z.B. 24">
+      </div>
+      <div class="field-group">
+        <label>Geschlecht</label>
+        <select id="gender">
+          <option value="">Bitte wählen …</option>
+          <option value="weiblich">Weiblich</option>
+          <option value="männlich">Männlich</option>
+          <option value="divers">Divers</option>
+          <option value="keine Angabe">Keine Angabe</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Studiengang / Beruf</label>
+        <input type="text" id="field_of_study" placeholder="z.B. Psychologie">
+      </div>
+      <div class="field-group">
+        <label>Semester / Berufsjahre</label>
+        <input type="text" id="semester" placeholder="z.B. 4. Semester">
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       BLOCK 2 · FKS dispositional
+  ══════════════════════════════════════════ -->
+  <div class="section-block" id="fks-block">
+    <span class="section-tag fks">FKS · Dispositional</span>
+    <h2 class="section-title">Flow-Erleben im Alltag</h2>
+    <p class="section-desc">
+      Die folgenden Aussagen beziehen sich auf das <em>generelle Erleben beim Tätigsein</em> – also nicht auf eine bestimmte Situation, sondern darauf, wie Sie Aktivitäten im Allgemeinen erleben.<br><br>
+      Bitte geben Sie an, wie sehr die jeweilige Aussage auf Sie zutrifft.
+    </p>
+
+    <div class="scale-poles">
+      <span>1 = trifft gar nicht zu</span>
+      <span>7 = trifft völlig zu</span>
+    </div>
+
+    <div id="fks-items"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       BLOCK 3 · FAM (Freude-Subskala)
+  ══════════════════════════════════════════ -->
+  <div class="section-block fam-section" id="fam-block">
+    <span class="section-tag fam">FAM · Freude-Subskala</span>
+    <h2 class="section-title">Einstellung zum Rechnen</h2>
+    <p class="section-desc">
+      Die folgenden Aussagen beziehen sich auf Ihre <em>allgemeine Einstellung zu Rechenaufgaben und mathematischen Tätigkeiten</em>.<br><br>
+      Bitte geben Sie an, wie sehr die jeweilige Aussage auf Sie zutrifft.
+    </p>
+
+    <div class="scale-poles">
+      <span>1 = trifft gar nicht zu</span>
+      <span>7 = trifft völlig zu</span>
+    </div>
+
+    <div id="fam-items"></div>
+  </div>
+
+  <!-- Submit -->
+  <div class="submit-zone">
+    <button class="submit-btn" onclick="submitForm()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v14a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Antworten speichern (JSON)
+    </button>
+    <p class="submit-hint">Die Daten werden lokal als JSON-Datei gespeichert · keine Datenübertragung</p>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Item definitions ────────────────────────────────────────────────────────
+
+const FKS_ITEMS = [
+  { id: "fks_01", text: "Ich bin völlig vertieft in das, was ich tue." },
+  { id: "fks_02", text: "Meine Gedanken bzw. Aktivitäten laufen flüssig und glatt." },
+  { id: "fks_03", text: "Ich merke nicht, wie die Zeit vergeht." },
+  { id: "fks_04", text: "Ich habe keine Mühe, mich zu konzentrieren." },
+  { id: "fks_05", text: "Mein Kopf ist völlig klar." },
+  { id: "fks_06", text: "Ich bin ganz bei der Sache." },
+  { id: "fks_07", text: "Das Richtige läuft von alleine." },
+  { id: "fks_08", text: "Ich weiß bei jeder Tätigkeit, was ich als Nächstes tun muss." },
+  { id: "fks_09", text: "Ich merke, dass ich die Aufgabe gut im Griff habe." },
+  { id: "fks_10", text: "Insgesamt erlebe ich Tätigkeiten als sehr lohnend und befriedigend." },
+];
+
+const FAM_ITEMS = [
+  { id: "fam_01", text: "Das Rechnen mit Zahlen macht mir Freude." },
+  { id: "fam_02", text: "Ich mag es, Rechenaufgaben zu lösen." },
+  { id: "fam_03", text: "Es macht mir Spaß, mich mit Mathematik zu beschäftigen." },
+  { id: "fam_04", text: "Wenn ich Rechenaufgaben löse, fühle ich mich wohl." },
+  { id: "fam_05", text: "Rechnen ist für mich eine angenehme Tätigkeit." },
+  { id: "fam_06", text: "Ich finde mathematische Aufgaben interessant." },
+  { id: "fam_07", text: "Mit Zahlen zu arbeiten, empfinde ich als reizvoll." },
+  { id: "fam_08", text: "Rechenaufgaben begeistern mich." },
+];
+
+// Stores answers: { itemId: value }
+const answers = {};
+const SCALE = [1,2,3,4,5,6,7];
+
+// ── Render ───────────────────────────────────────────────────────────────────
+
+function renderItems(items, containerId) {
+  const container = document.getElementById(containerId);
+  items.forEach((item, idx) => {
+    const row = document.createElement('div');
+    row.className = 'item-row';
+    row.id = 'row-' + item.id;
+
+    const textDiv = document.createElement('div');
+    textDiv.className = 'item-text';
+    textDiv.innerHTML = `<span class="item-num">${String(idx+1).padStart(2,'0')}</span>${item.text}`;
+
+    const likert = document.createElement('div');
+    likert.className = 'likert';
+
+    SCALE.forEach(val => {
+      const btn = document.createElement('button');
+      btn.className = 'likert-btn';
+      btn.textContent = val;
+      btn.setAttribute('aria-label', `${val} – ${item.text}`);
+      btn.onclick = () => selectAnswer(item.id, val);
+      btn.id = `btn-${item.id}-${val}`;
+      likert.appendChild(btn);
+    });
+
+    row.appendChild(textDiv);
+    row.appendChild(likert);
+    container.appendChild(row);
+  });
+}
+
+function selectAnswer(itemId, val) {
+  // Deselect old
+  if (answers[itemId] !== undefined) {
+    const old = document.getElementById(`btn-${itemId}-${answers[itemId]}`);
+    if (old) old.classList.remove('selected');
+  }
+  answers[itemId] = val;
+  document.getElementById(`btn-${itemId}-${val}`).classList.add('selected');
+  // Remove unanswered highlight
+  const row = document.getElementById('row-' + itemId);
+  if (row) row.classList.remove('unanswered');
+  updateProgress();
+}
+
+// ── Progress ─────────────────────────────────────────────────────────────────
+
+const ALL_ITEMS = [...FKS_ITEMS, ...FAM_ITEMS];
+
+function updateProgress() {
+  const total = ALL_ITEMS.length;
+  const done = ALL_ITEMS.filter(it => answers[it.id] !== undefined).length;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `${done} / ${total} beantwortet`;
+}
+
+// ── Validate ──────────────────────────────────────────────────────────────────
+
+function validate() {
+  const missing = ALL_ITEMS.filter(it => answers[it.id] === undefined);
+  missing.forEach(it => {
+    const row = document.getElementById('row-' + it.id);
+    if (row) row.classList.add('unanswered');
+  });
+  if (missing.length > 0) {
+    document.getElementById('validation-banner').style.display = 'block';
+    // Scroll to first missing
+    const firstRow = document.getElementById('row-' + missing[0].id);
+    if (firstRow) firstRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return false;
+  }
+  document.getElementById('validation-banner').style.display = 'none';
+  return true;
+}
+
+// ── Submit ────────────────────────────────────────────────────────────────────
+
+function submitForm() {
+  if (!validate()) {
+    showToast('Bitte alle Fragen beantworten.', 'error');
+    return;
+  }
+
+  const timestamp = new Date().toISOString();
+  const pid = 'P_' + Date.now();
+
+  // Build structured JSON
+  const payload = {
+    metadata: {
+      participant_id: pid,
+      timestamp,
+      study: "Flow-Rechenparadigma – Vorher-Befragung",
+      questionnaires: ["FKS_dispositional", "FAM_Freude"]
+    },
+    demographics: {
+      age: document.getElementById('age').value || null,
+      gender: document.getElementById('gender').value || null,
+      field_of_study: document.getElementById('field_of_study').value || null,
+      semester_or_years: document.getElementById('semester').value || null,
+    },
+    FKS_dispositional: {
+      description: "Flow-Kurzskala (dispositional), Rheinberg et al. 2003 – 7-stufige Likert-Skala (1–7)",
+      items: FKS_ITEMS.map(it => ({
+        id: it.id,
+        text: it.text,
+        response: answers[it.id]
+      })),
+      mean_score: computeMean(FKS_ITEMS)
+    },
+    FAM_Freude: {
+      description: "FAM Freude-Subskala (Einstellung zum Rechnen), adaptiert – 7-stufige Likert-Skala (1–7)",
+      items: FAM_ITEMS.map(it => ({
+        id: it.id,
+        text: it.text,
+        response: answers[it.id]
+      })),
+      mean_score: computeMean(FAM_ITEMS)
+    }
+  };
+
+  // Download JSON
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `flow_study_${pid}_${timestamp.slice(0,10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  showToast('✓ Daten gespeichert!', 'success');
+}
+
+function computeMean(items) {
+  const vals = items.map(it => answers[it.id]).filter(v => v !== undefined);
+  if (!vals.length) return null;
+  return +(vals.reduce((s,v) => s+v, 0) / vals.length).toFixed(2);
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+
+renderItems(FKS_ITEMS, 'fks-items');
+renderItems(FAM_ITEMS, 'fam-items');
+updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+{
+  "metadata": {
+    "participant_id": "sub-001",
+    "datum": "2026-02-03",
+    "exported_at": "2026-03-17T10:12:00.030Z",
+    "study": "TRR–Flow-Rechenparadigma",
+    "questionnaires": [
+      "Demographische_Daten",
+      "BDI_II",
+      "FKS_dispositional",
+      "FAM_Freude"
+    ]
+  },
+  "demographics": {
+    "geschlecht": "weiblich",
+    "alter": 22,
+    "muttersprache": "Deutsch",
+    "fremdsprachen_anzahl": 5,
+    "fremdsprachen_seit": "asdfs",
+    "familienstand": "ledig",
+    "wohnsituation": "Partnerschaft",
+    "schulabschluss": "Hauptschule",
+    "ausbildungsdauer_jahre": 8,
+    "beruf": "asdfs",
+    "rente": "Nein",
+    "erwerbstaetigkeit": "Ja",
+    "erwerbstaetigkeit_welche": "asdfasdf",
+    "rauchen": "Nichtraucher",
+    "alkohol": "Ja",
+    "alkohol_zuletzt": "asdfs",
+    "alkohol_wieviel": "20",
+    "alkohol_was": "wein",
+    "alkohol_glaeser_monat": 3,
+    "koffein": "Ja",
+    "koffein_tassen_tag": 2,
+    "sonstiges": "asdfsafsd"
+  },
+  "BDI_II": {
+    "description": "Beck Depression Inventory II – 0–3 pro Item, Gesamtmax. 63",
+    "items": {
+      "bdi_01": "3",
+      "bdi_02": "2",
+      "bdi_03": "1",
+      "bdi_04": "2",
+      "bdi_05": "3",
+      "bdi_06": "2",
+      "bdi_07": "2",
+      "bdi_08": "2",
+      "bdi_09": "2",
+      "bdi_10": "3",
+      "bdi_11": "3",
+      "bdi_12": "3",
+      "bdi_13": "2",
+      "bdi_14": "2",
+      "bdi_15": "2",
+      "bdi_16": "3a",
+      "bdi_17": "2",
+      "bdi_18": "2b",
+      "bdi_19": "2",
+      "bdi_20": "3",
+      "bdi_21": "3"
+    },
+    "totals": {
+      "seite1": null,
+      "seite2": null,
+      "seite3": null,
+      "gesamt": "49"
+    }
+  },
+  "FKS_dispositional": {
+    "description": "Flow-Kurzskala dispositional · Rheinberg et al. 2003 · 7-stufige Likert-Skala (1–7)",
+    "items": [
+      {
+        "id": "fks_01",
+        "text": "Ich bin völlig vertieft in das, was ich tue.",
+        "response": 1
+      },
+      {
+        "id": "fks_02",
+        "text": "Meine Gedanken bzw. Aktivitäten laufen flüssig und glatt.",
+        "response": 2
+      },
+      {
+        "id": "fks_03",
+        "text": "Ich merke nicht, wie die Zeit vergeht.",
+        "response": 1
+      },
+      {
+        "id": "fks_04",
+        "text": "Ich habe keine Mühe, mich zu konzentrieren.",
+        "response": 3
+      },
+      {
+        "id": "fks_05",
+        "text": "Mein Kopf ist völlig klar.",
+        "response": 4
+      },
+      {
+        "id": "fks_06",
+        "text": "Ich bin ganz bei der Sache.",
+        "response": 3
+      },
+      {
+        "id": "fks_07",
+        "text": "Das Richtige läuft von alleine.",
+        "response": 4
+      },
+      {
+        "id": "fks_08",
+        "text": "Ich weiß bei jeder Tätigkeit, was ich als Nächstes tun muss.",
+        "response": 3
+      },
+      {
+        "id": "fks_09",
+        "text": "Ich merke, dass ich die Aufgabe gut im Griff habe.",
+        "response": 2
+      },
+      {
+        "id": "fks_10",
+        "text": "Insgesamt erlebe ich Tätigkeiten als sehr lohnend und befriedigend.",
+        "response": 3
+      }
+    ],
+    "mean_score": 2.6
+  },
+  "FAM_Freude": {
+    "description": "FAM Freude-Subskala · Rheinberg et al. 2001 (adaptiert) · 7-stufige Likert-Skala (1–7)",
+    "items": [
+      {
+        "id": "fam_01",
+        "text": "Das Rechnen mit Zahlen macht mir Freude.",
+        "response": 3
+      },
+      {
+        "id": "fam_02",
+        "text": "Ich mag es, Rechenaufgaben zu lösen.",
+        "response": 2
+      },
+      {
+        "id": "fam_03",
+        "text": "Es macht mir Spaß, mich mit Mathematik zu beschäftigen.",
+        "response": 3
+      },
+      {
+        "id": "fam_04",
+        "text": "Wenn ich Rechenaufgaben löse, fühle ich mich wohl.",
+        "response": 2
+      },
+      {
+        "id": "fam_05",
+        "text": "Rechnen ist für mich eine angenehme Tätigkeit.",
+        "response": 3
+      },
+      {
+        "id": "fam_06",
+        "text": "Ich finde mathematische Aufgaben interessant.",
+        "response": 4
+      },
+      {
+        "id": "fam_07",
+        "text": "Mit Zahlen zu arbeiten, empfinde ich als reizvoll.",
+        "response": 3
+      },
+      {
+        "id": "fam_08",
+        "text": "Rechenaufgaben begeistern mich.",
+        "response": 4
+      }
+    ],
+    "mean_score": 3
+  }
+}

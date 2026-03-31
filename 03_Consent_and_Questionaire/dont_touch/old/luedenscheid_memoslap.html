@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MeMoSLAP – Lüdenscheider Aktivitätsfragebogen</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600&family=Source+Serif+4:wght@400;600&display=swap');
+  :root{--ink:#1a1a2e;--rule:#c8cdd8;--accent:#2563a8;--bg:#f7f8fc;--white:#fff}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Source Sans 3',sans-serif;font-size:13.5px;color:var(--ink);background:var(--bg);padding:30px 20px 60px}
+  .page{max-width:800px;margin:0 auto;background:var(--white);border:1px solid var(--rule);padding:40px 48px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+  .hdr{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:18px}
+  .hdr-l{font-size:13px;font-weight:600;letter-spacing:.05em}
+  .hdr-r{display:flex;gap:24px;font-size:12px}
+  .hdr-r label{font-weight:600;margin-right:3px}
+  .mf{display:inline-block;min-width:90px;border-bottom:1px solid var(--ink);padding:0 3px 1px}
+  input[type=text],input[type=number],input[type=date]{border:none;border-bottom:1.5px solid #9aa3b8;background:transparent;font-family:inherit;font-size:13px;color:var(--ink);padding:1px 3px;outline:none;transition:border-color .2s}
+  input[type=text]:focus,input[type=number]:focus,input[type=date]:focus{border-bottom-color:var(--accent)}
+  input[type=number]{width:55px}
+  input[type=text]{min-width:80px}
+  .w{min-width:160px}.m{min-width:90px}.s{width:50px}
+  h1{font-family:'Source Serif 4',serif;font-size:17px;font-weight:600;text-align:center;margin-bottom:6px}
+  .subtitle{font-size:11px;text-align:center;color:#888;margin-bottom:24px}
+  /* question blocks */
+  .q{margin-bottom:22px;border-left:3px solid var(--rule);padding-left:14px;transition:border-color .2s}
+  .q:hover{border-left-color:var(--accent)}
+  .q-title{font-weight:600;font-size:13.5px;margin-bottom:8px}
+  .q-title em{font-weight:400;font-style:normal;color:#555}
+  .opts{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center;margin-bottom:6px}
+  .opt{display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer}
+  input[type=radio],input[type=checkbox]{width:14px;height:14px;accent-color:var(--accent);cursor:pointer}
+  .sub{padding:4px 0 4px 8px;font-size:12.5px;color:#444;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .sub label{flex:0 0 auto}
+  .unit{font-size:12px;color:#888}
+  /* sport table */
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}
+  th{background:#eef1f7;font-weight:600;text-align:left;padding:5px 8px;border:1px solid var(--rule)}
+  td{padding:4px 8px;border:1px solid var(--rule)}
+  td input[type=text]{min-width:100px;width:100%}
+  td input[type=number]{width:50px}
+  /* scoring matrix */
+  .matrix-wrap{border:1px solid var(--rule);border-radius:4px;padding:14px 16px;margin-top:16px;background:#fafbfd}
+  .matrix-wrap h2{font-size:13px;font-weight:600;margin-bottom:10px;letter-spacing:.04em;text-transform:uppercase;color:#555}
+  .matrix-grid{display:grid;grid-template-columns:auto 1fr 1fr 1fr auto;gap:0;font-size:11.5px;border:1px solid var(--rule)}
+  .mg-h{background:#eef1f7;font-weight:600;padding:5px 7px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);text-align:center}
+  .mg-h:last-child{border-right:none}
+  .mg-cell{padding:4px 7px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);vertical-align:middle;font-size:11.5px}
+  .mg-cell:last-child{border-right:none}
+  .mg-cell.num{text-align:center;color:#555;font-style:italic}
+  .mg-score{width:42px;border:none;border-bottom:1px solid #9aa3b8;background:transparent;font-family:inherit;font-size:11.5px;text-align:center;outline:none}
+  .mg-score:focus{border-bottom-color:var(--accent)}
+  .summary{margin-top:14px;font-size:12.5px}
+  .sum-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+  .sum-row label{flex:0 0 240px;font-weight:600}
+  .sum-score{width:55px;border:none;border-bottom:1.5px solid #9aa3b8;background:transparent;font-family:inherit;font-size:13px;text-align:center;outline:none}
+  .sum-score:focus{border-bottom-color:var(--accent)}
+  /* self assessment */
+  .self-assess{margin-top:16px}
+  .sa-opt{display:flex;align-items:flex-start;gap:8px;margin-bottom:7px;cursor:pointer;font-size:13px;line-height:1.4}
+  .actions{text-align:center;margin-top:28px}
+  .btn{background:var(--accent);color:#fff;border:none;padding:10px 38px;font-size:14px;font-family:inherit;font-weight:600;letter-spacing:.04em;cursor:pointer;border-radius:3px;transition:background .2s}
+  .btn:hover{background:#1b4f90}
+  #ok{display:none;background:#d4edda;color:#155724;text-align:center;padding:11px;margin-top:14px;border-radius:3px;font-weight:600}
+  .footer{margin-top:26px;font-size:10px;color:#999;border-top:1px solid var(--rule);padding-top:7px}
+  .divider{border:none;border-top:1px solid var(--rule);margin:24px 0}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hdr">
+    <div class="hdr-l">MeMoSLAP</div>
+    <div class="hdr-r">
+      <div><label>Datum:</label><input type="date" name="datum" class="mf"></div>
+      <div><label>ID:</label><input type="text" name="participant_id" class="mf" style="min-width:80px"></div>
+    </div>
+  </div>
+
+  <h1>„Lüdenscheider Aktivitätsfragebogen"<br>zum Risikofaktor Bewegungsmangel</h1>
+  <div class="subtitle">© HÖLTKE/JAKOB SPORTMEDIZIN HELLERSEN 2002</div>
+
+  <form id="form">
+
+    <!-- Q1 -->
+    <div class="q">
+      <div class="q-title">1. Wie sieht Ihr Berufsalltag <em>(auch Hausfrau)</em> aus?</div>
+      <div style="font-size:12.5px;color:#555;margin-bottom:6px">Beinhaltet Ihre berufliche Vollzeit-Tätigkeit hauptsächlich:</div>
+      <div class="opts" style="flex-direction:column;align-items:flex-start;gap:5px">
+        <label class="opt"><input type="radio" name="q1_berufsalltag" value="sitzend"> 1.1 <strong>sitzende Tätigkeiten</strong> (z.B.: Büro, Computer, Student …)</label>
+        <label class="opt"><input type="radio" name="q1_berufsalltag" value="maessig"> 1.2 <strong>mäßige Bewegung</strong> &nbsp;(z.B.: Handwerker, Hausmeister, Hausfrau, Verkäufer …)</label>
+        <label class="opt"><input type="radio" name="q1_berufsalltag" value="intensiv"> 1.3 <strong>intensive Bewegung</strong> (z.B.: Postbote, Bauarbeiter, Packer, Bergmann …)</label>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q">
+      <div class="q-title">2. Sind Sie in der Woche regelmäßig zu Fuß unterwegs,</div>
+
+      <div style="margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:16px;font-weight:600;margin-bottom:4px">
+          <span style="flex:1">… auf dem Weg zur Arbeit oder zum Einkaufen u.s.w.</span>
+          <label class="opt"><input type="radio" name="q2a_fuss_arbeit" value="nein"> nein</label>
+          <label class="opt"><input type="radio" name="q2a_fuss_arbeit" value="ja"> ja</label>
+        </div>
+        <div class="sub">Wenn ja, wie lange sind Sie dabei gegangen? 2.1 Insgesamt ca.:
+          <input type="number" name="q2_1_minuten" class="s"> <span class="unit">Minuten</span>
+        </div>
+      </div>
+
+      <div>
+        <div style="display:flex;align-items:center;gap:16px;font-weight:600;margin-bottom:4px">
+          <span style="flex:1">… zum Spazierengehen oder Wandern?</span>
+          <label class="opt"><input type="radio" name="q2b_fuss_spazieren" value="nein"> nein</label>
+          <label class="opt"><input type="radio" name="q2b_fuss_spazieren" value="ja"> ja</label>
+        </div>
+        <div class="sub">Wenn ja, wie lange waren Sie letzte Woche spazieren? 2.2 Insgesamt ca.:
+          <input type="number" name="q2_2_minuten" class="s"> <span class="unit">Minuten</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q">
+      <div class="q-title">3. Sind Sie in der Woche regelmäßig mit dem Rad unterwegs,</div>
+
+      <div style="margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:16px;font-weight:600;margin-bottom:4px">
+          <span style="flex:1">… auf dem Weg zur Arbeit oder zum Einkaufen u.s.w.</span>
+          <label class="opt"><input type="radio" name="q3a_rad_arbeit" value="nein"> nein</label>
+          <label class="opt"><input type="radio" name="q3a_rad_arbeit" value="ja"> ja</label>
+        </div>
+        <div class="sub">Wenn ja, wie lange sind Sie dabei geradelt? 3.1 Insgesamt ca.:
+          <input type="number" name="q3_1_minuten" class="s"> <span class="unit">Minuten</span>
+        </div>
+      </div>
+
+      <div>
+        <div style="display:flex;align-items:center;gap:16px;font-weight:600;margin-bottom:4px">
+          <span style="flex:1">… auf dem Heimtrainer bzw. Radtouren?</span>
+          <label class="opt"><input type="radio" name="q3b_heimtrainer" value="nein"> nein</label>
+          <label class="opt"><input type="radio" name="q3b_heimtrainer" value="ja"> ja</label>
+        </div>
+        <div class="sub">Wenn ja, wie lange sind Sie dabei geradelt?
+          3.2 Insgesamt ca.: <input type="number" name="q3_2_minuten" class="s"> <span class="unit">Minuten</span>
+          &nbsp;&nbsp;3.3 bei ca.: <input type="number" name="q3_3_watt" class="s"> <span class="unit">Watt-Leistung</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q">
+      <div class="q-title" style="display:flex;align-items:center;gap:20px">
+        <span>4. Haben Sie einen Garten?</span>
+        <label class="opt"><input type="radio" name="q4_garten" value="nein"> nein</label>
+        <label class="opt"><input type="radio" name="q4_garten" value="ja"> ja</label>
+      </div>
+      <div class="sub" style="margin-top:6px">Wenn ja, wieviele Stunden haben Sie letzte Woche in Ihrem Garten verbracht?</div>
+      <div class="sub">4.1 Insgesamt ca.: <input type="number" name="q4_1_stunden_gesamt" class="s"> <span class="unit">Stunden pro Woche,</span></div>
+      <div class="sub">4.2 davon waren: <input type="number" name="q4_2_stunden_arbeit" class="s"> <span class="unit">Stunden Gartenarbeit</span></div>
+      <div class="sub">4.3 und: <input type="number" name="q4_3_stunden_ruhe" class="s"> <span class="unit">Stunden Ruhe und Erholung</span></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q">
+      <div class="q-title" style="display:flex;align-items:center;gap:20px">
+        <span>5. Steigen Sie regelmäßig Treppen?</span>
+        <label class="opt"><input type="radio" name="q5_treppen" value="nein"> nein</label>
+      </div>
+      <div class="sub" style="margin-top:4px">
+        <label class="opt"><input type="radio" name="q5_treppen" value="ja"> 5. ja, ca.</label>
+        <input type="number" name="q5_stockwerke" class="s"> <span class="unit">Stockwerke, ca.</span>
+        <input type="number" name="q5_mal_tag" class="s"> <span class="unit">mal am Tag</span>
+      </div>
+    </div>
+
+    <!-- Q6/7 -->
+    <div class="q">
+      <div class="q-title">6./7. Gehen Sie regelmäßig zu Tanzveranstaltungen und/oder kegeln Sie?</div>
+      <div class="sub" style="margin-bottom:6px">
+        <span style="font-weight:600;flex:0 0 70px">Tanzen</span>
+        <label class="opt"><input type="radio" name="q6_tanzen" value="nein"> nein</label>
+        <label class="opt"><input type="radio" name="q6_tanzen" value="ja"> 6. ja, ca.</label>
+        <input type="number" name="q6_mal_monat" class="s"> <span class="unit">mal/Monat, jeweils</span>
+        <input type="number" name="q6_std" class="s"> <span class="unit">Std.</span>
+      </div>
+      <div class="sub">
+        <span style="font-weight:600;flex:0 0 70px">Kegeln</span>
+        <label class="opt"><input type="radio" name="q7_kegeln" value="nein"> nein</label>
+        <label class="opt"><input type="radio" name="q7_kegeln" value="ja"> 7. ja, ca.</label>
+        <input type="number" name="q7_mal_monat" class="s"> <span class="unit">mal/Monat, jeweils</span>
+        <input type="number" name="q7_std" class="s"> <span class="unit">Std.</span>
+      </div>
+    </div>
+
+    <!-- Q8/9 -->
+    <div class="q">
+      <div class="q-title">8./9. Gehen Sie regelmäßig zum Schwimmen und/oder walken / joggen / laufen Sie?</div>
+
+      <div style="margin-bottom:8px">
+        <div style="font-weight:600;text-decoration:underline;margin-bottom:4px">Schwimmen</div>
+        <div class="sub">
+          <label class="opt"><input type="radio" name="q8_schwimmen" value="nein"> nein</label>
+          <label class="opt"><input type="radio" name="q8_schwimmen" value="ja"> 8. ja, ca.</label>
+          <input type="number" name="q8_mal_monat" class="s"> <span class="unit">mal/Monat, jeweils</span>
+          <input type="number" name="q8_min" class="s"> <span class="unit">Min.</span>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-weight:600;text-decoration:underline;margin-bottom:4px">Walken/Joggen/Laufen <em style="font-weight:400;font-style:normal;font-size:12px">(Nichtzutreffendes bitte streichen!)</em></div>
+        <div class="sub" style="margin-bottom:4px">
+          <label class="opt"><input type="radio" name="q9_walking" value="nein"> nein</label>
+          <label class="opt"><input type="radio" name="q9_walking" value="ja_walking"> 9.1 ja Walking, ca.</label>
+          <input type="number" name="q9_1_mal_monat" class="s"> <span class="unit">mal/Monat, jeweils</span>
+          <input type="number" name="q9_1_min" class="s"> <span class="unit">Min.</span>
+        </div>
+        <div class="sub">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label class="opt"><input type="radio" name="q9_jogging" value="ja_jogging"> 9.2 ja Jogging, ca.</label>
+          <input type="number" name="q9_2_mal_monat" class="s"> <span class="unit">mal/Monat, jeweils</span>
+          <input type="number" name="q9_2_min" class="s"> <span class="unit">Min.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="q">
+      <div class="q-title">10. Welche Sportarten haben Sie in den letzten 2 Jahren oder schon länger mindestens 1x pro Woche regelmäßig betrieben?</div>
+      <div style="font-size:12px;color:#666;margin-bottom:8px">Bitte so ausfüllen! (z.B.: Schwimmen 3 mal pro Woche / Monat, Dauer jeweils ca. 20 Min.)</div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:32px">#</th>
+            <th>Sportart</th>
+            <th>Mal pro Woche / Monat</th>
+            <th>Dauer jeweils ca. (Min.)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1.</td><td><input type="text" name="q10_sport1_art"></td><td><input type="number" name="q10_sport1_mal" class="s"></td><td><input type="number" name="q10_sport1_min" class="s"></td></tr>
+          <tr><td>2.</td><td><input type="text" name="q10_sport2_art"></td><td><input type="number" name="q10_sport2_mal" class="s"></td><td><input type="number" name="q10_sport2_min" class="s"></td></tr>
+          <tr><td>3.</td><td><input type="text" name="q10_sport3_art"></td><td><input type="number" name="q10_sport3_mal" class="s"></td><td><input type="number" name="q10_sport3_min" class="s"></td></tr>
+          <tr><td>4.</td><td><input type="text" name="q10_sport4_art"></td><td><input type="number" name="q10_sport4_mal" class="s"></td><td><input type="number" name="q10_sport4_min" class="s"></td></tr>
+          <tr><td>5.</td><td>Gymnastik/Dehnung</td><td><input type="number" name="q10_sport5_mal" class="s"></td><td><input type="number" name="q10_sport5_min" class="s"></td></tr>
+          <tr><td>6.</td><td>Krafttraining</td><td><input type="number" name="q10_sport6_mal" class="s"></td><td><input type="number" name="q10_sport6_min" class="s"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Q11 -->
+    <div class="q">
+      <div class="q-title">11. Wieviel Sport (alles zusammengerechnet) treiben Sie regelmäßig innerhalb einer Woche?</div>
+      <div class="sub">
+        Gesamtsport pro Woche ca.:
+        <input type="number" name="q11_gesamt_minuten"> <span class="unit">Minuten</span>
+      </div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="q">
+      <div class="q-title">12. Wieviele Stunden Freizeit pro Tag haben Sie für Entspannung und Erholung?</div>
+      <div class="sub">12.1 ca.: <input type="number" name="q12_1_stunden" class="s"> <span class="unit">Stunden,</span></div>
+      <div class="sub">davon entfallen auf das Fernsehen &nbsp;&nbsp; 12.2 ca.: <input type="number" name="q12_2_stunden_tv" class="s"> <span class="unit">Stunden pro Tag</span></div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="q">
+      <div class="q-title">13. Wenn Sie Ihr wöchentliches Aktivitätslevel an Bewegung und Sport einschätzen, wie würden Sie selbst sich beurteilen?</div>
+      <div class="self-assess">
+        <label class="sa-opt"><input type="radio" name="q13_selbsteinschaetzung" value="zu_wenig"> – viel zu wenig körperlich und sportlich aktiv (Bewegungsmangel)</label>
+        <label class="sa-opt"><input type="radio" name="q13_selbsteinschaetzung" value="mindest"> – die Mindestanforderungen an körperlicher Aktivität und Bewegung sind gerade noch erfüllt</label>
+        <label class="sa-opt"><input type="radio" name="q13_selbsteinschaetzung" value="ausreichend"> – ausreichend körperlich und sportlich aktiv (kein Bewegungsmangel)</label>
+        <label class="sa-opt"><input type="radio" name="q13_selbsteinschaetzung" value="sehr_aktiv"> – sehr hohes Aktivitätslevel durch Bewegung und regelmäßigen Sport</label>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Scoring Matrix (read-only reference + editable score fields) -->
+    <div class="matrix-wrap">
+      <h2>Auswertungsmatrix – Lüdenscheider Fragebogen</h2>
+      <div style="font-size:11.5px;color:#666;margin-bottom:10px">Wöchentliche Gesamtaktivität – Punkte eintragen:</div>
+
+      <div style="overflow-x:auto">
+        <table style="font-size:11.5px">
+          <thead>
+            <tr>
+              <th>Frage</th>
+              <th>Körperl. Aktivität</th>
+              <th>15 Min.</th>
+              <th>30 Min.</th>
+              <th>60 Min.</th>
+              <th>Gesamt-Punkte</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>2.1</td><td>Wege zu Fuß</td><td class="num">0,7</td><td class="num">1,5</td><td class="num">3</td><td><input type="number" step="0.1" name="score_2_1" class="mg-score"></td></tr>
+            <tr><td>2.2</td><td>Spaziergänge</td><td class="num">0,9</td><td class="num">1,7</td><td class="num">3,5</td><td><input type="number" step="0.1" name="score_2_2" class="mg-score"></td></tr>
+            <tr><td>3.1</td><td>Wege per Rad</td><td class="num">1</td><td class="num">2</td><td class="num">4</td><td><input type="number" step="0.1" name="score_3_1" class="mg-score"></td></tr>
+            <tr><td>3.3</td><td>Rad-Ergometer (75 W / 100 W / 150 W)</td><td class="num">1 / 1,4 / 2,8</td><td class="num">2 / 2,7 / 3,5</td><td class="num">4 / 5,5 / 7</td><td><input type="number" step="0.1" name="score_3_3" class="mg-score"></td></tr>
+            <tr><td>4.2</td><td>Gartenarbeit</td><td class="num">0,7</td><td class="num">1</td><td class="num">1,2</td><td><input type="number" step="0.1" name="score_4_2" class="mg-score"></td></tr>
+            <tr><td>5.</td><td>Treppensteigen (Stockwerke×Frequenz/Tag)</td><td class="num">(4)</td><td class="num">(8)</td><td class="num">(10)</td><td><input type="number" step="0.1" name="score_5" class="mg-score"></td></tr>
+            <tr><td>6./7.</td><td>Tanzen; Kegeln</td><td class="num">0,7</td><td class="num">1,5</td><td class="num">3</td><td><input type="number" step="0.1" name="score_6_7" class="mg-score"></td></tr>
+            <tr style="background:#fdf8e8"><td colspan="5" style="font-weight:600;padding:5px 8px">SPORT-AKTIVITÄT</td><td></td></tr>
+            <tr><td>8.</td><td>Schwimmen</td><td class="num">1,5</td><td class="num">3</td><td class="num">6</td><td><input type="number" step="0.1" name="score_8" class="mg-score"></td></tr>
+            <tr><td>3.2</td><td>Radtouren (16–20 km/h)</td><td class="num">1,3</td><td class="num">3</td><td class="num">6</td><td><input type="number" step="0.1" name="score_3_2" class="mg-score"></td></tr>
+            <tr><td>9.1</td><td>Walking/Nordic W. (5–7 km/h)</td><td class="num">1,3</td><td class="num">2,5</td><td class="num">5</td><td><input type="number" step="0.1" name="score_9_1" class="mg-score"></td></tr>
+            <tr><td>9.2</td><td>Jogging (ca. 7,5–10 km/h)</td><td class="num">1,8</td><td class="num">3,5</td><td class="num">7</td><td><input type="number" step="0.1" name="score_9_2" class="mg-score"></td></tr>
+            <tr><td>10.</td><td>Gymnastik, Krafttraining</td><td class="num">1,1</td><td class="num">2,3</td><td class="num">4,5</td><td><input type="number" step="0.1" name="score_10_gym" class="mg-score"></td></tr>
+            <tr><td>10.</td><td>Tennis, Badminton</td><td class="num">1,5</td><td class="num">3</td><td class="num">6</td><td><input type="number" step="0.1" name="score_10_tennis" class="mg-score"></td></tr>
+            <tr><td>10.</td><td>Fußball, Handball, Basketb.</td><td class="num">1,8</td><td class="num">3,5</td><td class="num">7</td><td><input type="number" step="0.1" name="score_10_ball" class="mg-score"></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="summary" style="margin-top:14px">
+        <div class="sum-row">
+          <label>Gesamt-Aktivität Punkte-Summe:</label>
+          <input type="number" step="0.1" name="score_total_aktivitaet" class="sum-score">
+        </div>
+        <div class="sum-row">
+          <label>Sport-Aktivität Punkte-Summe:</label>
+          <input type="number" step="0.1" name="score_total_sport" class="sum-score">
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="submit" class="btn">Speichern &amp; als JSON exportieren</button>
+    </div>
+    <div id="ok">✓ Daten erfolgreich gespeichert!</div>
+  </form>
+
+  <div class="footer">© HÖLTKE/JAKOB SPORTMEDIZIN HELLERSEN 2002 &nbsp;·&nbsp; (in Anlehnung an FREY/BERG „Freiburger Fragebogen" 1995)</div>
+</div>
+
+<script>
+document.getElementById('form').addEventListener('submit',function(e){
+  e.preventDefault();
+  const fd=new FormData(this),d={form:'MeMoSLAP_Luedenscheider_Aktivitaetsfragebogen'};
+  for(const[k,v]of fd.entries())if(v!=='')d[k]=v;
+  d.exported_at=new Date().toISOString();
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));
+  a.download=`AKT_${d.participant_id||'unbekannt'}_${(d.datum||'').replace(/-/g,'')}.json`;
+  a.click();
+  const ok=document.getElementById('ok');ok.style.display='block';
+  setTimeout(()=>ok.style.display='none',4000);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MeMoSLAP – Demographische Daten</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600&family=Source+Serif+4:wght@400;600&display=swap');
+  :root {
+    --ink:#1a1a2e; --rule:#c8cdd8; --accent:#2563a8;
+    --bg:#f7f8fc; --white:#fff; --lw:270px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Source Sans 3',sans-serif;font-size:14px;color:var(--ink);background:var(--bg);padding:30px 20px 60px}
+  .page{max-width:780px;margin:0 auto;background:var(--white);border:1px solid var(--rule);padding:40px 48px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+  .hdr{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:18px}
+  .hdr-l{font-size:13px;font-weight:600;letter-spacing:.05em}
+  .hdr-r{display:flex;gap:24px;font-size:12px}
+  .hdr-r label{font-weight:600;margin-right:3px}
+  .mf{display:inline-block;min-width:90px;border-bottom:1px solid var(--ink);padding:0 3px 1px}
+  h1{font-family:'Source Serif 4',serif;font-size:15px;font-weight:600;text-align:center;letter-spacing:.08em;text-transform:uppercase;margin-bottom:20px;border-bottom:1px solid var(--rule);padding-bottom:12px}
+  .row{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-bottom:1px solid var(--rule)}
+  .row:last-of-type{border-bottom:none}
+  .row.top{align-items:flex-start;padding-top:10px}
+  .rl{flex:0 0 var(--lw);font-weight:600;font-size:13px;line-height:1.45}
+  .rc{flex:1;display:flex;flex-wrap:wrap;align-items:baseline;gap:7px}
+  .rc.col{flex-direction:column;gap:5px}
+  input[type=text],input[type=number],input[type=date],textarea{border:none;border-bottom:1.5px solid #9aa3b8;background:transparent;font-family:inherit;font-size:13px;color:var(--ink);padding:1px 3px;outline:none;transition:border-color .2s}
+  input[type=text]:focus,input[type=number]:focus,textarea:focus{border-bottom-color:var(--accent)}
+  input[type=text]{min-width:110px}
+  input[type=number]{width:58px}
+  .w{min-width:230px}.m{min-width:150px}
+  .opts{display:flex;flex-wrap:wrap;gap:5px 16px;align-items:center}
+  .opt{display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer}
+  input[type=radio],input[type=checkbox]{width:14px;height:14px;accent-color:var(--accent);cursor:pointer}
+  .edu{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px}
+  .sub{display:flex;align-items:baseline;gap:6px;padding:3px 0 3px 14px;font-size:12.5px;color:#444}
+  .sub-l{flex:0 0 170px}
+  .unit{font-size:12px;color:#666}
+  .actions{text-align:center;margin-top:28px}
+  .btn{background:var(--accent);color:#fff;border:none;padding:10px 38px;font-size:14px;font-family:inherit;font-weight:600;letter-spacing:.04em;cursor:pointer;border-radius:3px;transition:background .2s}
+  .btn:hover{background:#1b4f90}
+  #ok{display:none;background:#d4edda;color:#155724;text-align:center;padding:11px;margin-top:14px;border-radius:3px;font-weight:600}
+  .footer{margin-top:26px;font-size:10px;color:#999;border-top:1px solid var(--rule);padding-top:7px}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hdr">
+    <div class="hdr-l">MeMoSLAP</div>
+    <div class="hdr-r">
+      <div><label>Datum:</label><input type="date" name="datum" class="mf"></div>
+      <div><label>ID:</label><input type="text" name="participant_id" class="mf" style="min-width:80px"></div>
+    </div>
+  </div>
+  <h1>Demographische Daten (DD)</h1>
+
+  <form id="form">
+    <div class="row">
+      <div class="rl">Geschlecht:</div>
+      <div class="rc">
+        <div class="opts">
+          <label class="opt"><input type="radio" name="geschlecht" value="männlich"> männlich</label>
+          <label class="opt"><input type="radio" name="geschlecht" value="weiblich"> weiblich</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="rl">Alter:</div>
+      <div class="rc">
+        <input type="number" name="alter" min="18" max="100">
+        <span class="unit">Jahre</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="rl">Muttersprache:</div>
+      <div class="rc">
+        <div class="opts">
+          <label class="opt"><input type="radio" name="muttersprache" value="Deutsch"> Deutsch</label>
+          <label class="opt"><input type="radio" name="muttersprache" value="Andere"> Andere:</label>
+          <input type="text" name="muttersprache_andere" class="m">
+        </div>
+      </div>
+    </div>
+
+    <div class="row top">
+      <div class="rl">Anzahl flüssig gesprochener<br>Fremdsprachen:</div>
+      <div class="rc col">
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <input type="number" name="fremdsprachen_anzahl" min="0" max="20" style="width:50px">
+        </div>
+        <div style="display:flex;align-items:baseline;gap:6px;font-size:12.5px">
+          <span>Welche:</span><input type="text" name="fremdsprachen_welche" class="w">
+        </div>
+        <div style="display:flex;align-items:baseline;gap:6px;font-size:12.5px">
+          <span>Erlernt seit:</span><input type="text" name="fremdsprachen_seit" class="m">
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="rl">Familienstand:</div>
+      <div class="rc">
+        <div class="opts">
+          <label class="opt"><input type="radio" name="familienstand" value="ledig"> ledig</label>
+          <label class="opt"><input type="radio" name="familienstand" value="verheiratet"> verheiratet</label>
+          <label class="opt"><input type="radio" name="familienstand" value="verwitwet"> verwitwet</label>
+          <label class="opt"><input type="radio" name="familienstand" value="geschieden"> geschieden</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="rl">Wohnsituation:</div>
+      <div class="rc">
+        <div class="opts">
+          <label class="opt"><input type="radio" name="wohnsituation" value="Partnerschaft"> Partnerschaft</label>
+          <label class="opt"><input type="radio" name="wohnsituation" value="allein"> allein</label>
+          <label class="opt"><input type="radio" name="wohnsituation" value="Sonstiges"> Sonstiges:</label>
+          <input type="text" name="wohnsituation_sonstiges" class="m">
+        </div>
+      </div>
+    </div>
+
+    <div class="row top">
+      <div class="rl">Höchster Schulabschluss:</div>
+      <div class="rc">
+        <div class="edu">
+          <label class="opt"><input type="radio" name="schulabschluss" value="ohne_Abschluss"> ohne Abschluss</label>
+          <label class="opt"><input type="radio" name="schulabschluss" value="Hochschulreife"> Hochschulreife (Abitur / Fachabitur)</label>
+          <label class="opt"><input type="radio" name="schulabschluss" value="Hauptschule"> Haupt-/Volksschulabschluss</label>
+          <label class="opt"><input type="radio" name="schulabschluss" value="Universitaet"> Universität / Fachhochschule</label>
+          <label class="opt"><input type="radio" name="schulabschluss" value="Mittlere_Reife"> Mittlere Reife (Realschule, polytechnische Oberschule)</label>
+          <label class="opt"><input type="radio" name="schulabschluss" value="Postgraduiert"> Postgraduiert (Dr.)</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="rl">Ausbildungsdauer (Schule + Ausbildung / Uni):</div>
+      <div class="rc">
+        <input type="number" name="ausbildungsdauer_jahre" min="0" max="40">
+        <span class="unit">Jahre</span>
+      </div>
+    </div>
+
+    <div class="row top">
+      <div class="rl">Voraussichtliches Ende des Studiums:<br>Studienfach / Berufsbezeichnung:</div>
+      <div class="rc col">
+        <input type="text" name="studium_ende" class="w" placeholder="z.B. 2026">
+        <input type="text" name="beruf" class="w" placeholder="z.B. Student Psychologie, Lehrer …">
+      </div>
+    </div>
+
+    <div class="row top">
+      <div class="rl">Derzeit:</div>
+      <div class="rc col">
+        <div style="display:flex;align-items:baseline;gap:10px">
+          <span style="font-weight:600;font-size:13px;flex:0 0 58px">Rente:</span>
+          <label class="opt"><input type="radio" name="rente" value="Ja"> Ja</label>
+          <label class="opt"><input type="radio" name="rente" value="Nein"> Nein</label>
+        </div>
+        <div class="sub"><span class="sub-l">Seit wann?:</span><input type="text" name="rente_seit" class="m"></div>
+        <div class="sub"><span class="sub-l">Grund (z.B. bei Frührente):</span><input type="text" name="rente_grund" class="w"></div>
+        <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px">
+          <span style="font-size:13px;flex:0 0 220px">ausgeübte Erwerbstätigkeit / Studium:</span>
+          <label class="opt"><input type="radio" name="erwerbstaetigkeit" value="Ja"> Ja</label>
+          <label class="opt"><input type="radio" name="erwerbstaetigkeit" value="Nein"> Nein</label>
+        </div>
+        <div class="sub"><span class="sub-l">Wenn ja, welche:</span><input type="text" name="erwerbstaetigkeit_welche" class="w"></div>
+      </div>
+    </div>
+
+    <div class="row top">
+      <div class="rl">Rauchverhalten:</div>
+      <div class="rc col">
+        <div class="opts">
+          <label class="opt"><input type="radio" name="rauchen" value="Nichtraucher"> Nichtraucher</label>
+          <label class="opt"><input type="radio" name="rauchen" value="Raucher"> Raucher; seit</label>
+          <input type="text" name="rauchen_seit" style="width:75px">
+        </div>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="rauchen" value="Ehemaliger_Raucher"> Ehemaliger Raucher; von</label>
+          <input type="text" name="rauchen_von" style="width:65px">
+          <span class="unit">bis</span>
+          <input type="text" name="rauchen_bis" style="width:65px">
+        </div>
+        <div style="display:flex;align-items:baseline;gap:6px;font-size:12.5px">
+          <span>Anzahl Zigaretten pro Tag:</span>
+          <input type="number" name="zigaretten_pro_tag" min="0" style="width:52px">
+        </div>
+      </div>
+    </div>
+
+    <div class="row top">
+      <div class="rl">Trinkverhalten:</div>
+      <div class="rc col">
+        <div style="display:flex;align-items:baseline;gap:10px;font-weight:600">
+          <span style="flex:0 0 58px">Alkohol:</span>
+          <label class="opt"><input type="radio" name="alkohol" value="Ja"> Ja</label>
+          <label class="opt"><input type="radio" name="alkohol" value="Nein"> Nein</label>
+        </div>
+        <div class="sub"><span class="sub-l">Wann zuletzt:</span><input type="text" name="alkohol_zuletzt" class="m"></div>
+        <div class="sub"><span class="sub-l">Wie viel:</span><input type="text" name="alkohol_wieviel" class="m"></div>
+        <div class="sub"><span class="sub-l">Was:</span><input type="text" name="alkohol_was" class="m"></div>
+        <div class="sub"><span class="sub-l">Gläser (0,2l) ⌀ im Monat:</span><input type="number" name="alkohol_glaeser_monat" min="0" style="width:52px"></div>
+        <div style="display:flex;align-items:baseline;gap:10px;font-weight:600;margin-top:6px">
+          <span style="flex:0 0 58px">Koffein:</span>
+          <label class="opt"><input type="radio" name="koffein" value="Ja"> Ja</label>
+          <label class="opt"><input type="radio" name="koffein" value="Nein"> Nein</label>
+        </div>
+        <div class="sub"><span class="sub-l">Durchschnitt Tassen / Tag:</span><input type="number" name="koffein_tassen_tag" min="0" style="width:52px"></div>
+        <div class="sub"><span class="sub-l">Seit:</span><input type="text" name="koffein_seit" class="m"></div>
+      </div>
+    </div>
+
+    <div class="row top">
+      <div class="rl" style="font-weight:600">Sonstiges:</div>
+      <div class="rc">
+        <textarea name="sonstiges" rows="3" style="width:100%;border:1px solid var(--rule);padding:6px;font-family:inherit;font-size:13px;resize:vertical"></textarea>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="submit" class="btn">Speichern &amp; als JSON exportieren</button>
+    </div>
+    <div id="ok">✓ Daten erfolgreich gespeichert!</div>
+  </form>
+
+  <div class="footer">14.09.2015 | Dr. Daria Antonenko &nbsp;·&nbsp; Modifiziert von Sven Paßmann am 08.08.2023</div>
+</div>
+<script>
+document.getElementById('form').addEventListener('submit',function(e){
+  e.preventDefault();
+  const fd=new FormData(this),d={form:'MeMoSLAP_Demographische_Daten'};
+  for(const[k,v]of fd.entries())if(v!=='')d[k]=v;
+  d.exported_at=new Date().toISOString();
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));
+  a.download=`DD_${d.participant_id||'unbekannt'}_${(d.datum||'').replace(/-/g,'')}.json`;
+  a.click();
+  const ok=document.getElementById('ok');ok.style.display='block';
+  setTimeout(()=>ok.style.display='none',4000);
+});
+</script>
+</body>
+</html>

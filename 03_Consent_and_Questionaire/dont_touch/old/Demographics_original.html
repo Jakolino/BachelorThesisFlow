@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demografischer Fragebogen - Forschungsstudie</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f0f4f8;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            padding: 35px;
+        }
+        
+        h1 {
+            color: #1a5f7a;
+            margin-bottom: 10px;
+            font-size: 28px;
+            border-bottom: 3px solid #57a6c8;
+            padding-bottom: 15px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin: 30px 0 20px 0;
+            font-size: 20px;
+            font-weight: 600;
+            background-color: #e8f0fe;
+            padding: 8px 15px;
+            border-radius: 6px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding: 0 5px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .required-field::after {
+            content: " *";
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e7e9;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+        
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="email"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #57a6c8;
+            box-shadow: 0 0 5px rgba(87, 166, 200, 0.3);
+        }
+        
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 8px;
+        }
+        
+        .radio-option,
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .radio-option input[type="radio"],
+        .checkbox-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .radio-option label,
+        .checkbox-option label {
+            margin-bottom: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        
+        .hinweis {
+            background-color: #fff8e7;
+            border-left: 4px solid #f1c40f;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .hinweis p {
+            margin-bottom: 5px;
+        }
+        
+        .hinweis i {
+            color: #856404;
+        }
+        
+        button {
+            background-color: #57a6c8;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 30px auto 10px;
+            min-width: 250px;
+        }
+        
+        button:hover {
+            background-color: #3d8eb0;
+        }
+        
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .fortschritt {
+            text-align: center;
+            margin: 20px 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .fehler {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .erfolg {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .datenschutz {
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e7e9;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .radio-group,
+            .checkbox-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Demografischer Fragebogen</h1>
+        <div class="subtitle">Teil der Forschungsstudie "Mathematisches Denken und Kognition"</div>
+        
+        <div class="hinweis">
+            <p><strong>Wichtiger Hinweis:</strong></p>
+            <p>Vielen Dank für Ihre Teilnahme an dieser Studie. Die folgenden Fragen helfen uns, die Zusammensetzung unserer Stichprobe besser zu verstehen. Alle Daten werden anonym behandelt und ausschließlich für wissenschaftliche Zwecke verwendet. Sie können jede Frage überspringen, außer die mit <span style="color: #e74c3c;">*</span> gekennzeichneten Pflichtfelder.</p>
+        </div>
+        
+        <form id="demographics-form">
+            <!-- Persönliche Informationen -->
+            <h2>Persönliche Informationen</h2>
+            
+            <div class="section">
+                <div class="form-group">
+                    <label for="alter" class="required-field">Alter</label>
+                    <input type="number" id="alter" name="alter" min="18" max="100" step="1" required>
+                    <div class="fehler" id="fehler-alter">Bitte geben Sie ein gültiges Alter zwischen 18 und 100 Jahren ein.</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="geschlecht" class="required-field">Geschlecht</label>
+                    <select id="geschlecht" name="geschlecht" required>
+                        <option value="">Bitte auswählen</option>
+                        <option value="weiblich">Weiblich</option>
+                        <option value="maennlich">Männlich</option>
+                        <option value="divers">Divers</option>
+                        <option value="keine_angabe">Keine Angabe</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="geburtsort">Geburtsort (Stadt/Land)</label>
+                    <input type="text" id="geburtsort" name="geburtsort" placeholder="z.B. Berlin, Deutschland">
+                </div>
+            </div>
+            
+            <!-- Bildung und Beruf -->
+            <h2>Bildung und Beruf</h2>
+            
+            <div class="section">
+                <div class="form-group">
+                    <label for="bildung" class="required-field">Höchster Bildungsabschluss</label>
+                    <select id="bildung" name="bildung" required>
+                        <option value="">Bitte auswählen</option>
+                        <option value="kein_abschluss">Kein Schulabschluss</option>
+                        <option value="hauptschule">Hauptschulabschluss</option>
+                        <option value="realschule">Realschulabschluss (Mittlere Reife)</option>
+                        <option value="abitur">Abitur / Fachabitur</option>
+                        <option value="ausbildung">Berufsausbildung</option>
+                        <option value="bachelor">Bachelor (Hochschule/Universität)</option>
+                        <option value="master">Master / Diplom / Magister</option>
+                        <option value="promotion">Promotion / Habilitation</option>
+                        <option value="sonstiges">Sonstiges</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="beruf">Aktuelle berufliche Tätigkeit</label>
+                    <input type="text" id="beruf" name="beruf" placeholder="z.B. Student, Lehrer, Ingenieur">
+                </div>
+                
+                <div class="form-group">
+                    <label>Studieren Sie derzeit oder haben Sie Mathematik studiert?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="mathe_ja" name="mathe_studium" value="ja">
+                            <label for="mathe_ja">Ja</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="mathe_nein" name="mathe_studium" value="nein">
+                            <label for="mathe_nein">Nein</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="mathe_teilweise" name="mathe_studium" value="teilweise">
+                            <label for="mathe_teilweise">Teilweise (z.B. als Nebenfach)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sprache und Herkunft -->
+            <h2>Sprache und Herkunft</h2>
+            
+            <div class="section">
+                <div class="form-group">
+                    <label for="muttersprache" class="required-field">Muttersprache(n)</label>
+                    <input type="text" id="muttersprache" name="muttersprache" placeholder="z.B. Deutsch" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="deutsch_niveau">Wenn Deutsch nicht Ihre Muttersprache ist, wie gut beherrschen Sie Deutsch?</label>
+                    <select id="deutsch_niveau" name="deutsch_niveau">
+                        <option value="">Bitte auswählen</option>
+                        <option value="muttersprache">Ist meine Muttersprache</option>
+                        <option value="c2">Fließend (C2 - Muttersprachniveau)</option>
+                        <option value="c1">Sehr gut (C1)</option>
+                        <option value="b2">Gut (B2)</option>
+                        <option value="b1">Grundlagen (B1)</option>
+                        <option value="a1-a2">Anfänger (A1-A2)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Händigkeit -->
+            <h2>Händigkeit</h2>
+            
+            <div class="section">
+                <div class="form-group">
+                    <label class="required-field">Welche Hand benutzen Sie bevorzugt für die meisten Tätigkeiten?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="rechts" name="haendigkeit" value="rechts" required>
+                            <label for="rechts">Rechts</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="links" name="haendigkeit" value="links" required>
+                            <label for="links">Links</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="beidhaendig" name="haendigkeit" value="beidhaendig" required>
+                            <label for="beidhaendig">Beidhändig</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Zusätzliche Informationen -->
+            <h2>Zusätzliche Informationen</h2>
+            
+            <div class="section">
+                <div class="form-group">
+                    <label>Haben Sie Seh- oder Hörbeeinträchtigungen (korrigiert oder unkorrigiert)?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="sehen_ja" name="beeintraechtigung" value="ja_sehen">
+                            <label for="sehen_ja">Ja, Sehbeeinträchtigung</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="hoeren_ja" name="beeintraechtigung" value="ja_hoeren">
+                            <label for="hoeren_ja">Ja, Hörbeeinträchtigung</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="beides_ja" name="beeintraechtigung" value="ja_beides">
+                            <label for="beides_ja">Ja, beides</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="keine_beeintraechtigung" name="beeintraechtigung" value="nein">
+                            <label for="keine_beeintraechtigung">Nein</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bemerkungen">Anmerkungen oder Besonderheiten, die wir berücksichtigen sollten?</label>
+                    <textarea id="bemerkungen" name="bemerkungen" rows="4" placeholder="Hier können Sie uns gerne etwas mitteilen..."></textarea>
+                </div>
+            </div>
+            
+            <!-- Einwilligung -->
+            <div class="form-group">
+                <div class="checkbox-option">
+                    <input type="checkbox" id="einwilligung" name="einwilligung" required>
+                    <label for="einwilligung" class="required-field">Ich bin damit einverstanden, dass meine Angaben für wissenschaftliche Zwecke anonymisiert verwendet werden.</label>
+                </div>
+            </div>
+            
+            <button type="submit" id="submit-btn">Fragebogen absenden</button>
+            
+            <div class="fortschritt">
+                <span id="pflichtfelder-hinweis">Mit <span style="color: #e74c3c;">*</span> markierte Felder sind Pflichtfelder</span>
+            </div>
+            
+            <div id="erfolg-meldung" class="erfolg">
+                <strong>Vielen Dank!</strong> Ihre Angaben wurden erfolgreich übermittelt.
+            </div>
+        </form>
+        
+        <div class="datenschutz">
+            <p><strong>Datenschutzhinweis:</strong> Ihre Daten werden vertraulich behandelt und gemäß der DSGVO verarbeitet. Die Teilnahme ist freiwillig und kann jederzeit ohne Angabe von Gründen abgebrochen werden. Bei Fragen wenden Sie sich bitte an die Studienleitung.</p>
+            <p style="margin-top: 10px;">© 2024 - Forschungsstudie Mathematisches Denken</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('demographics-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const erfolgMeldung = document.getElementById('erfolg-meldung');
+            
+            // Altersvalidierung
+            const alterInput = document.getElementById('alter');
+            const fehlerAlter = document.getElementById('fehler-alter');
+            
+            alterInput.addEventListener('input', function() {
+                const alter = parseInt(this.value);
+                if (alter < 18 || alter > 100 || isNaN(alter)) {
+                    fehlerAlter.style.display = 'block';
+                    this.setCustomValidity('Ungültiges Alter');
+                } else {
+                    fehlerAlter.style.display = 'none';
+                    this.setCustomValidity('');
+                }
+            });
+            
+            // Formularabsendung
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Prüfe ob alle Pflichtfelder ausgefüllt sind
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+                
+                // Sammle alle Formulardaten
+                const formData = new FormData(form);
+                const daten = {};
+                
+                for (let [key, value] of formData.entries()) {
+                    if (key === 'beeintraechtigung' && daten[key]) {
+                        // Für Mehrfachauswahl bei Beeinträchtigung
+                        daten[key] = [daten[key], value];
+                    } else {
+                        daten[key] = value;
+                    }
+                }
+                
+                // Füge Zeitstempel hinzu
+                daten.timestamp = new Date().toISOString();
+                daten.teilnehmer_id = 'TN_' + Math.random().toString(36).substr(2, 9);
+                
+                // Hier würden die Daten normalerweise an einen Server gesendet
+                console.log('Gesammelte Daten:', daten);
+                
+                // Simuliere erfolgreiche Übermittlung
+                erfolgMeldung.style.display = 'block';
+                submitBtn.disabled = true;
+                
+                // Optional: Daten als JSON zum Download anbieten
+                const datenStr = JSON.stringify(daten, null, 2);
+                console.log('JSON-Daten:', datenStr);
+                
+                // Formular zurücksetzen nach Erfolg (optional)
+                // form.reset();
+                
+                // Hier könnte ein tatsächlicher POST-Request erfolgen:
+                /*
+                fetch('ihr-server-endpunkt', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(daten)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    erfolgMeldung.style.display = 'block';
+                    submitBtn.disabled = true;
+                })
+                .catch(error => {
+                    console.error('Fehler:', error);
+                    alert('Es gab einen Fehler bei der Übermittlung. Bitte versuchen Sie es später erneut.');
+                });
+                */
+            });
+            
+            // Optional: Daten im Local Storage speichern bei Seitenverlassen
+            window.addEventListener('beforeunload', function() {
+                const formData = new FormData(form);
+                const daten = {};
+                for (let [key, value] of formData.entries()) {
+                    daten[key] = value;
+                }
+                if (Object.keys(daten).length > 0) {
+                    localStorage.setItem('demographics_draft', JSON.stringify(daten));
+                }
+            });
+            
+            // Optional: Gespeicherte Daten wiederherstellen
+            const savedData = localStorage.getItem('demographics_draft');
+            if (savedData) {
+                const daten = JSON.parse(savedData);
+                for (let key in daten) {
+                    const input = form.elements[key];
+                    if (input) {
+                        if (input.type === 'radio' || input.type === 'checkbox') {
+                            // Für Radio-Buttons und Checkboxen
+                            const element = form.elements[key];
+                            if (element.length) {
+                                for (let i = 0; i < element.length; i++) {
+                                    if (element[i].value === daten[key]) {
+                                        element[i].checked = true;
+                                    }
+                                }
+                            }
+                        } else {
+                            input.value = daten[key];
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

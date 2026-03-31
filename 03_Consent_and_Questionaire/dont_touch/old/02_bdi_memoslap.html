@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MeMoSLAP – BDI-II</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,400&family=Source+Serif+4:wght@400;600&display=swap');
+  :root{--ink:#1a1a2e;--rule:#c8cdd8;--accent:#2563a8;--bg:#f7f8fc;--white:#fff;--hi:#eef4ff}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Source Sans 3',sans-serif;font-size:13.5px;color:var(--ink);background:var(--bg);padding:30px 20px 60px}
+  .page{max-width:820px;margin:0 auto;background:var(--white);border:1px solid var(--rule);padding:40px 48px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+  .hdr{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:18px}
+  .hdr-l{font-size:13px;font-weight:600;letter-spacing:.05em}
+  .hdr-r{display:flex;gap:24px;font-size:12px}
+  .hdr-r label{font-weight:600;margin-right:3px}
+  .mf{display:inline-block;min-width:90px;border-bottom:1px solid var(--ink);padding:0 3px 1px}
+  input[type=text],input[type=date]{border:none;border-bottom:1.5px solid #9aa3b8;background:transparent;font-family:inherit;font-size:13px;color:var(--ink);padding:1px 3px;outline:none;transition:border-color .2s}
+  input[type=text]:focus,input[type=date]:focus{border-bottom-color:var(--accent)}
+  h1{font-family:'Source Serif 4',serif;font-size:22px;font-weight:600;color:var(--accent);margin-bottom:14px}
+  .instruct{font-style:italic;font-size:13px;line-height:1.6;color:#444;background:#fdf8e8;border-left:3px solid #e6c84a;padding:12px 16px;margin-bottom:28px}
+  .instruct strong{font-style:normal}
+  /* two-column item grid */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px;margin-bottom:28px}
+  .item{border:1px solid var(--rule);border-radius:4px;padding:14px 16px;transition:border-color .2s}
+  .item:hover{border-color:#9ab}
+  .item-title{font-weight:600;font-size:13px;margin-bottom:10px}
+  .item-title span{color:var(--accent);margin-right:4px}
+  .option{display:flex;align-items:flex-start;gap:8px;margin-bottom:7px;cursor:pointer;font-size:13px;line-height:1.4}
+  .option:last-child{margin-bottom:0}
+  .score-num{flex:0 0 16px;font-style:italic;color:#888;font-size:12px;padding-top:1px}
+  input[type=radio]{width:14px;height:14px;margin-top:2px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+  /* selected highlight */
+  .option:has(input:checked){background:var(--hi);margin:-3px;padding:3px;border-radius:3px}
+  .totals{border:1px solid var(--rule);border-radius:4px;padding:16px 20px;margin-top:4px;font-size:13px}
+  .totals h2{font-size:13px;font-weight:600;margin-bottom:12px;letter-spacing:.03em;text-transform:uppercase;color:#555}
+  .tot-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .tot-row label{flex:0 0 220px;font-size:13px}
+  .tot-score{width:52px;border:none;border-bottom:1.5px solid #9aa3b8;background:transparent;font-family:inherit;font-size:13px;text-align:center;padding:1px 3px;outline:none}
+  .tot-score:focus{border-bottom-color:var(--accent)}
+  .max{font-size:12px;color:#888}
+  .actions{text-align:center;margin-top:28px}
+  .btn{background:var(--accent);color:#fff;border:none;padding:10px 38px;font-size:14px;font-family:inherit;font-weight:600;letter-spacing:.04em;cursor:pointer;border-radius:3px;transition:background .2s}
+  .btn:hover{background:#1b4f90}
+  #ok{display:none;background:#d4edda;color:#155724;text-align:center;padding:11px;margin-top:14px;border-radius:3px;font-weight:600}
+  .footer{margin-top:26px;font-size:10px;color:#999;border-top:1px solid var(--rule);padding-top:7px}
+  @media(max-width:600px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hdr">
+    <div class="hdr-l">MeMoSLAP</div>
+    <div class="hdr-r">
+      <div><label>Datum:</label><input type="date" name="datum" class="mf"></div>
+      <div><label>ID:</label><input type="text" name="participant_id" class="mf" style="min-width:80px"></div>
+    </div>
+  </div>
+
+  <h1>BDI-II</h1>
+
+  <div class="instruct">
+    <em>Anleitung:</em> Dieser Fragebogen enthält 21 Gruppen von Aussagen. Lesen Sie jede Gruppe von Aussagen sorgfältig durch und suchen Sie dann in jeder Gruppe <strong>eine Aussage</strong>, die am besten beschreibt, wie Sie sich <strong>in den letzten zwei Wochen, einschließlich heute, gefühlt haben</strong>. Kreuzen Sie die Zahl neben der Aussage an, die Sie herausgesucht haben. Wenn in einer Gruppe mehrere Aussagen gleichermaßen auf Sie zutreffen, kreuzen Sie die Aussage mit der höheren Zahl an. Achten Sie bitte darauf, dass Sie in einer Gruppe nicht mehr als eine Aussage ankreuzen, das gilt auch für Gruppe 16 (Veränderungen der Schlafgewohnheiten) oder Gruppe 18 (Veränderung des Appetits).
+  </div>
+
+  <form id="form">
+    <div class="grid">
+
+      <!-- 1 -->
+      <div class="item">
+        <div class="item-title"><span>1.</span> Traurigkeit</div>
+        <label class="option"><input type="radio" name="bdi_01" value="0"><span class="score-num">0</span>Ich bin nicht traurig.</label>
+        <label class="option"><input type="radio" name="bdi_01" value="1"><span class="score-num">1</span>Ich bin oft traurig.</label>
+        <label class="option"><input type="radio" name="bdi_01" value="2"><span class="score-num">2</span>Ich bin ständig traurig.</label>
+        <label class="option"><input type="radio" name="bdi_01" value="3"><span class="score-num">3</span>Ich bin so traurig und unglücklich, dass ich es nicht aushalten kann.</label>
+      </div>
+
+      <!-- 4 -->
+      <div class="item">
+        <div class="item-title"><span>4.</span> Verlust von Freude</div>
+        <label class="option"><input type="radio" name="bdi_04" value="0"><span class="score-num">0</span>Ich habe so viel Freude wie immer an den Dingen, die mir Spaß machen.</label>
+        <label class="option"><input type="radio" name="bdi_04" value="1"><span class="score-num">1</span>Ich habe nicht mehr so viel Spaß an den Dingen wie früher.</label>
+        <label class="option"><input type="radio" name="bdi_04" value="2"><span class="score-num">2</span>Ich habe sehr wenig Freude an den Dingen, die mir früher Spaß gemacht haben.</label>
+        <label class="option"><input type="radio" name="bdi_04" value="3"><span class="score-num">3</span>Ich habe keine Freude an den Dingen, die mir früher Spaß gemacht haben.</label>
+      </div>
+
+      <!-- 2 -->
+      <div class="item">
+        <div class="item-title"><span>2.</span> Pessimismus</div>
+        <label class="option"><input type="radio" name="bdi_02" value="0"><span class="score-num">0</span>Ich bin nicht mutlos, was meine Zukunft angeht.</label>
+        <label class="option"><input type="radio" name="bdi_02" value="1"><span class="score-num">1</span>Ich bin mutloser als früher, was meine Zukunft angeht.</label>
+        <label class="option"><input type="radio" name="bdi_02" value="2"><span class="score-num">2</span>Ich glaube nicht, dass sich meine Lage verbessert.</label>
+        <label class="option"><input type="radio" name="bdi_02" value="3"><span class="score-num">3</span>Ich habe das Gefühl, dass es keine Hoffnung gibt für meine Zukunft und es nur noch schlimmer wird.</label>
+      </div>
+
+      <!-- 5 -->
+      <div class="item">
+        <div class="item-title"><span>5.</span> Schuldgefühle</div>
+        <label class="option"><input type="radio" name="bdi_05" value="0"><span class="score-num">0</span>Ich habe keine besonderen Schuldgefühle.</label>
+        <label class="option"><input type="radio" name="bdi_05" value="1"><span class="score-num">1</span>Ich habe bei vielen Dingen, die ich getan habe oder hätte tun sollen, Schuldgefühle.</label>
+        <label class="option"><input type="radio" name="bdi_05" value="2"><span class="score-num">2</span>Ich habe die meiste Zeit Schuldgefühle.</label>
+        <label class="option"><input type="radio" name="bdi_05" value="3"><span class="score-num">3</span>Ich habe ständig Schuldgefühle.</label>
+      </div>
+
+      <!-- 3 -->
+      <div class="item">
+        <div class="item-title"><span>3.</span> Frühere Misserfolge</div>
+        <label class="option"><input type="radio" name="bdi_03" value="0"><span class="score-num">0</span>Ich fühle mich nicht als Versager.</label>
+        <label class="option"><input type="radio" name="bdi_03" value="1"><span class="score-num">1</span>Ich habe öfter versagt, als ich sollte.</label>
+        <label class="option"><input type="radio" name="bdi_03" value="2"><span class="score-num">2</span>Wenn ich zurückblicke, sehe ich eine Menge Misserfolge.</label>
+        <label class="option"><input type="radio" name="bdi_03" value="3"><span class="score-num">3</span>Ich fühle mich persönlich als totaler Versager.</label>
+      </div>
+
+      <!-- 6 -->
+      <div class="item">
+        <div class="item-title"><span>6.</span> Gefühle, bestraft zu werden</div>
+        <label class="option"><input type="radio" name="bdi_06" value="0"><span class="score-num">0</span>Ich habe nicht das Gefühl, für etwas bestraft zu werden.</label>
+        <label class="option"><input type="radio" name="bdi_06" value="1"><span class="score-num">1</span>Ich habe das Gefühl, dass ich vielleicht für etwas bestraft werde.</label>
+        <label class="option"><input type="radio" name="bdi_06" value="2"><span class="score-num">2</span>Ich glaube, dass ich bestraft werde.</label>
+        <label class="option"><input type="radio" name="bdi_06" value="3"><span class="score-num">3</span>Ich habe das Gefühl für etwas bestraft zu werden.</label>
+      </div>
+
+      <!-- 7 -->
+      <div class="item">
+        <div class="item-title"><span>7.</span> Abneigung gegen sich selbst</div>
+        <label class="option"><input type="radio" name="bdi_07" value="0"><span class="score-num">0</span>Meine Gefühle mir gegenüber sind die gleichen geblieben.</label>
+        <label class="option"><input type="radio" name="bdi_07" value="1"><span class="score-num">1</span>Ich habe das Vertrauen in mich verloren.</label>
+        <label class="option"><input type="radio" name="bdi_07" value="2"><span class="score-num">2</span>Ich bin von mir selbst enttäuscht.</label>
+        <label class="option"><input type="radio" name="bdi_07" value="3"><span class="score-num">3</span>Ich mag mich nicht.</label>
+      </div>
+
+      <!-- 12 -->
+      <div class="item">
+        <div class="item-title"><span>12.</span> Interesselosigkeit</div>
+        <label class="option"><input type="radio" name="bdi_12" value="0"><span class="score-num">0</span>Ich habe das Interesse an anderen Menschen oder an Tätigkeiten nicht verloren.</label>
+        <label class="option"><input type="radio" name="bdi_12" value="1"><span class="score-num">1</span>Ich bin weniger an anderen Menschen oder Dingen interessiert als vorher.</label>
+        <label class="option"><input type="radio" name="bdi_12" value="2"><span class="score-num">2</span>Ich habe mein Interesse an anderen Menschen oder Dingen zum größten Teil verloren.</label>
+        <label class="option"><input type="radio" name="bdi_12" value="3"><span class="score-num">3</span>Es ist schwer, für irgendwas Interesse aufzubringen.</label>
+      </div>
+
+      <!-- 8 -->
+      <div class="item">
+        <div class="item-title"><span>8.</span> Selbstvorwürfe</div>
+        <label class="option"><input type="radio" name="bdi_08" value="0"><span class="score-num">0</span>Ich bin mir selbst gegenüber nicht kritischer als sonst und mache mir nicht mehr Vorwürfe als sonst.</label>
+        <label class="option"><input type="radio" name="bdi_08" value="1"><span class="score-num">1</span>Ich bin mir selbst gegenüber kritischer als früher.</label>
+        <label class="option"><input type="radio" name="bdi_08" value="2"><span class="score-num">2</span>Ich mache mir Vorwürfe für alle meine Fehler.</label>
+        <label class="option"><input type="radio" name="bdi_08" value="3"><span class="score-num">3</span>Ich gebe mir die Schuld für alles Schlimme, was passiert.</label>
+      </div>
+
+      <!-- 13 -->
+      <div class="item">
+        <div class="item-title"><span>13.</span> Entschlussunfähigkeit</div>
+        <label class="option"><input type="radio" name="bdi_13" value="0"><span class="score-num">0</span>Ich treffe Entscheidungen etwa so leicht wie immer.</label>
+        <label class="option"><input type="radio" name="bdi_13" value="1"><span class="score-num">1</span>Es fällt mir schwerer als sonst, Entscheidungen zu treffen.</label>
+        <label class="option"><input type="radio" name="bdi_13" value="2"><span class="score-num">2</span>Ich habe viel größere Schwierigkeiten, Entscheidungen zu treffen, als früher.</label>
+        <label class="option"><input type="radio" name="bdi_13" value="3"><span class="score-num">3</span>Ich habe Mühe, überhaupt Entscheidungen zu treffen.</label>
+      </div>
+
+      <!-- 9 -->
+      <div class="item">
+        <div class="item-title"><span>9.</span> Selbstmordgedanken oder –wünsche</div>
+        <label class="option"><input type="radio" name="bdi_09" value="0"><span class="score-num">0</span>Ich denke nie daran, mich umzubringen.</label>
+        <label class="option"><input type="radio" name="bdi_09" value="1"><span class="score-num">1</span>Ich habe Selbstmordgedanken, aber ich würde sie nicht ausführen.</label>
+        <label class="option"><input type="radio" name="bdi_09" value="2"><span class="score-num">2</span>Ich möchte mich umbringen.</label>
+        <label class="option"><input type="radio" name="bdi_09" value="3"><span class="score-num">3</span>Ich würde mich umbringen, wenn ich die Möglichkeit hätte.</label>
+      </div>
+
+      <!-- 14 -->
+      <div class="item">
+        <div class="item-title"><span>14.</span> Wertlosigkeit</div>
+        <label class="option"><input type="radio" name="bdi_14" value="0"><span class="score-num">0</span>Ich fühle mich nicht wertlos.</label>
+        <label class="option"><input type="radio" name="bdi_14" value="1"><span class="score-num">1</span>Ich halte mich nicht für so wertvoll und nützlich wie früher.</label>
+        <label class="option"><input type="radio" name="bdi_14" value="2"><span class="score-num">2</span>Ich habe das Gefühl, weniger Wert zu sein, als andere Menschen.</label>
+        <label class="option"><input type="radio" name="bdi_14" value="3"><span class="score-num">3</span>Ich habe das Gefühl, völlig wertlos zu sein.</label>
+      </div>
+
+      <!-- 10 -->
+      <div class="item">
+        <div class="item-title"><span>10.</span> Weinen</div>
+        <label class="option"><input type="radio" name="bdi_10" value="0"><span class="score-num">0</span>Ich weine nicht mehr als früher.</label>
+        <label class="option"><input type="radio" name="bdi_10" value="1"><span class="score-num">1</span>Ich weine mehr als früher.</label>
+        <label class="option"><input type="radio" name="bdi_10" value="2"><span class="score-num">2</span>Ich weine wegen jeder Kleinigkeit.</label>
+        <label class="option"><input type="radio" name="bdi_10" value="3"><span class="score-num">3</span>Mir ist nach Weinen zumute, aber ich kann nicht.</label>
+      </div>
+
+      <!-- 15 -->
+      <div class="item">
+        <div class="item-title"><span>15.</span> Verlust an Energie</div>
+        <label class="option"><input type="radio" name="bdi_15" value="0"><span class="score-num">0</span>Ich habe so viel Energie wie immer.</label>
+        <label class="option"><input type="radio" name="bdi_15" value="1"><span class="score-num">1</span>Ich habe weniger Energie als früher.</label>
+        <label class="option"><input type="radio" name="bdi_15" value="2"><span class="score-num">2</span>Ich habe nicht genügend Energie, sehr viel zu tun.</label>
+        <label class="option"><input type="radio" name="bdi_15" value="3"><span class="score-num">3</span>Ich habe nicht genügend Energie, irgendetwas zu tun.</label>
+      </div>
+
+      <!-- 11 -->
+      <div class="item">
+        <div class="item-title"><span>11.</span> Unruhe</div>
+        <label class="option"><input type="radio" name="bdi_11" value="0"><span class="score-num">0</span>Ich bin nicht unruhiger oder erregter als sonst.</label>
+        <label class="option"><input type="radio" name="bdi_11" value="1"><span class="score-num">1</span>Ich bin unruhiger oder erregter als sonst.</label>
+        <label class="option"><input type="radio" name="bdi_11" value="2"><span class="score-num">2</span>Ich bin so unruhig oder erregt, dass es schwer ist, mich nicht zu bewegen.</label>
+        <label class="option"><input type="radio" name="bdi_11" value="3"><span class="score-num">3</span>Ich bin so unruhig oder erregt, dass ich ständig in Bewegung bleiben oder etwas tun muss.</label>
+      </div>
+
+      <!-- 16 -->
+      <div class="item">
+        <div class="item-title"><span>16.</span> Veränderung der Schlafgewohnheiten</div>
+        <label class="option"><input type="radio" name="bdi_16" value="0"><span class="score-num">0</span>Meine Schlafgewohnheiten haben sich nicht geändert.</label>
+        <label class="option"><input type="radio" name="bdi_16" value="1a"><span class="score-num">1a</span>Ich schlafe etwas mehr als sonst.</label>
+        <label class="option"><input type="radio" name="bdi_16" value="1b"><span class="score-num">1b</span>Ich schlafe etwas weniger als sonst.</label>
+        <label class="option"><input type="radio" name="bdi_16" value="2a"><span class="score-num">2a</span>Ich schlafe viel mehr als sonst.</label>
+        <label class="option"><input type="radio" name="bdi_16" value="2b"><span class="score-num">2b</span>Ich schlafe viel weniger als sonst.</label>
+        <label class="option"><input type="radio" name="bdi_16" value="3a"><span class="score-num">3a</span>Ich schlafe die meiste Zeit des Tages.</label>
+        <label class="option"><input type="radio" name="bdi_16" value="3b"><span class="score-num">3b</span>Ich wache 1–2 Stunden zu früh auf und kann dann nicht mehr einschlafen.</label>
+      </div>
+
+      <!-- 17 -->
+      <div class="item">
+        <div class="item-title"><span>17.</span> Reizbarkeit</div>
+        <label class="option"><input type="radio" name="bdi_17" value="0"><span class="score-num">0</span>Ich bin nicht reizbarer als sonst.</label>
+        <label class="option"><input type="radio" name="bdi_17" value="1"><span class="score-num">1</span>Ich bin reizbarer als sonst.</label>
+        <label class="option"><input type="radio" name="bdi_17" value="2"><span class="score-num">2</span>Ich bin viel reizbarer als sonst.</label>
+        <label class="option"><input type="radio" name="bdi_17" value="3"><span class="score-num">3</span>Ich bin ständig reizbar.</label>
+      </div>
+
+      <!-- 18 -->
+      <div class="item">
+        <div class="item-title"><span>18.</span> Veränderungen des Appetits</div>
+        <label class="option"><input type="radio" name="bdi_18" value="0"><span class="score-num">0</span>Mein Appetit hat sich nicht verändert.</label>
+        <label class="option"><input type="radio" name="bdi_18" value="1a"><span class="score-num">1a</span>Mein Appetit ist etwas kleiner als sonst.</label>
+        <label class="option"><input type="radio" name="bdi_18" value="1b"><span class="score-num">1b</span>Mein Appetit ist etwas größer als sonst.</label>
+        <label class="option"><input type="radio" name="bdi_18" value="2a"><span class="score-num">2a</span>Mein Appetit ist viel kleiner als vorher.</label>
+        <label class="option"><input type="radio" name="bdi_18" value="2b"><span class="score-num">2b</span>Mein Appetit ist viel größer als vorher.</label>
+        <label class="option"><input type="radio" name="bdi_18" value="3a"><span class="score-num">3a</span>Ich habe überhaupt keinen Appetit.</label>
+        <label class="option"><input type="radio" name="bdi_18" value="3b"><span class="score-num">3b</span>Ich habe ständig großen Hunger.</label>
+      </div>
+
+      <!-- 19 -->
+      <div class="item">
+        <div class="item-title"><span>19.</span> Konzentrationsschwierigkeiten</div>
+        <label class="option"><input type="radio" name="bdi_19" value="0"><span class="score-num">0</span>Ich kann mich so gut konzentrieren wie immer.</label>
+        <label class="option"><input type="radio" name="bdi_19" value="1"><span class="score-num">1</span>Ich kann mich nicht so gut konzentrieren wie sonst.</label>
+        <label class="option"><input type="radio" name="bdi_19" value="2"><span class="score-num">2</span>Es fällt mir schwer, mich sehr lange auf etwas zu konzentrieren.</label>
+        <label class="option"><input type="radio" name="bdi_19" value="3"><span class="score-num">3</span>Ich kann mich auf gar nichts konzentrieren.</label>
+      </div>
+
+      <!-- 20 -->
+      <div class="item">
+        <div class="item-title"><span>20.</span> Müdigkeit</div>
+        <label class="option"><input type="radio" name="bdi_20" value="0"><span class="score-num">0</span>Ich bin nicht müder als sonst.</label>
+        <label class="option"><input type="radio" name="bdi_20" value="1"><span class="score-num">1</span>Ich werde schneller müde als sonst.</label>
+        <label class="option"><input type="radio" name="bdi_20" value="2"><span class="score-num">2</span>Ich bin für viele Dinge, die ich früher gern getan habe, zu müde.</label>
+        <label class="option"><input type="radio" name="bdi_20" value="3"><span class="score-num">3</span>Ich bin für die meisten Dinge, die ich früher getan habe, zu müde.</label>
+      </div>
+
+      <!-- 21 -->
+      <div class="item">
+        <div class="item-title"><span>21.</span> Verlust des Interesses am Sex</div>
+        <label class="option"><input type="radio" name="bdi_21" value="0"><span class="score-num">0</span>Ich habe in letzter Zeit keine Veränderung meines Interesses am Sex bemerkt.</label>
+        <label class="option"><input type="radio" name="bdi_21" value="1"><span class="score-num">1</span>Ich habe weniger Interesse am Sex als früher.</label>
+        <label class="option"><input type="radio" name="bdi_21" value="2"><span class="score-num">2</span>Ich habe jetzt viel weniger Interesse am Sex als früher.</label>
+        <label class="option"><input type="radio" name="bdi_21" value="3"><span class="score-num">3</span>Ich habe das Interesse am Sex völlig verloren.</label>
+      </div>
+
+    </div><!-- /grid -->
+
+    <!-- Totals -->
+    <div class="totals">
+      <h2>Gesamtpunktzahl</h2>
+      <div class="tot-row">
+        <label>Gesamtpunktzahl Seite 1 (Items 1–6):</label>
+        <input type="number" name="total_seite1" class="tot-score" min="0" max="18" placeholder="0">
+        <span class="max">/ 18</span>
+      </div>
+      <div class="tot-row">
+        <label>Gesamtpunktzahl Seite 2 (Items 7–15):</label>
+        <input type="number" name="total_seite2" class="tot-score" min="0" max="27" placeholder="0">
+        <span class="max">/ 27</span>
+      </div>
+      <div class="tot-row">
+        <label>Gesamtpunktzahl Seite 3 (Items 16–21):</label>
+        <input type="number" name="total_seite3" class="tot-score" min="0" max="18" placeholder="0">
+        <span class="max">/ 18</span>
+      </div>
+      <div class="tot-row" style="border-top:1px solid var(--rule);padding-top:10px;margin-top:4px">
+        <label><strong>Gesamtpunktzahl:</strong></label>
+        <input type="number" name="total_gesamt" id="total_gesamt" class="tot-score" min="0" max="63" placeholder="0" style="font-weight:600">
+        <span class="max"><strong>/ 63</strong></span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="submit" class="btn">Speichern &amp; als JSON exportieren</button>
+    </div>
+    <div id="ok">✓ Daten erfolgreich gespeichert!</div>
+  </form>
+
+  <div class="footer">MeMoSLAP | BDI-II (Beck Depression Inventory II)</div>
+</div>
+
+<script>
+// Auto-calculate total
+function calcTotal(){
+  const fields=['bdi_01','bdi_02','bdi_03','bdi_04','bdi_05','bdi_06',
+                'bdi_07','bdi_08','bdi_09','bdi_10','bdi_11','bdi_12',
+                'bdi_13','bdi_14','bdi_15','bdi_16','bdi_17','bdi_18',
+                'bdi_19','bdi_20','bdi_21'];
+  let t=0;
+  fields.forEach(n=>{
+    const el=document.querySelector(`input[name="${n}"]:checked`);
+    if(el){const v=parseFloat(el.value);if(!isNaN(v))t+=v;}
+  });
+  document.getElementById('total_gesamt').value=Math.round(t);
+}
+document.querySelectorAll('input[type=radio]').forEach(r=>r.addEventListener('change',calcTotal));
+
+document.getElementById('form').addEventListener('submit',function(e){
+  e.preventDefault();
+  const fd=new FormData(this),d={form:'MeMoSLAP_BDI_II'};
+  for(const[k,v]of fd.entries())if(v!=='')d[k]=v;
+  d.exported_at=new Date().toISOString();
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));
+  a.download=`BDI_${d.participant_id||'unbekannt'}_${(d.datum||'').replace(/-/g,'')}.json`;
+  a.click();
+  const ok=document.getElementById('ok');ok.style.display='block';
+  setTimeout(()=>ok.style.display='none',4000);
+});
+</script>
+</body>
+</html>
